@@ -1,0 +1,9 @@
+StakeholderID,StakeholderName,Category,InfluenceLevel,PriorityLevel
+SH-01,Patient,End user,High,High
+SH-02,Doctor,Internal user,High,High
+SH-03,Receptionist / Front desk staff,Internal user,Medium,Medium
+SH-04,Hospital Administrator,System owner,High,High
+SH-05,Health insurance provider,External stakeholder,Medium,Low
+SH-06,Hospital IT department,System operator,Medium,High
+SH-07,Health regulatory authority,Legal/regulatory stakeholder,Low,High
+SH-08,Development team,Delivery stakeholder,High,High

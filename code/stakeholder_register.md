@@ -1,0 +1,15 @@
+# Stakeholder Register
+
+Project: MedBook - Online Medical Appointment Booking System
+Author: Tran Doan Viet Anh
+
+| ID | Name | Category | Power | Interest | Management Strategy |
+|---|---|---|---|---|---|
+| SH-01 | Patient | End user | High | High | Manage Closely |
+| SH-02 | Doctor | Internal user | High | High | Manage Closely |
+| SH-03 | Receptionist / Front desk staff | Internal user | Medium | Medium | Monitor |
+| SH-04 | Hospital Administrator | System owner | High | High | Manage Closely |
+| SH-05 | Health insurance provider | External stakeholder | Medium | Low | Monitor |
+| SH-06 | Hospital IT department | System operator | Medium | High | Keep Informed |
+| SH-07 | Health regulatory authority | Legal/regulatory stakeholder | Low | High | Keep Informed |
+| SH-08 | Development team | Delivery stakeholder | High | High | Manage Closely |
