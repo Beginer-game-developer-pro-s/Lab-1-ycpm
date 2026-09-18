@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 generate_report_docx.py
-Tạo file Báo cáo DOCX chuẩn định dạng, font chữ, màu sắc và bố cục khớp 100% với lab01_sample_report.pdf
-Tác giả: Trần Doãn Việt Anh
-Ngôn ngữ: Tiếng Việt chuẩn mực, chuyên nghiệp, học thuật.
+Generates the official DOCX lab report matching the styling, typography, colors,
+and layout of lab01_sample_report.pdf.
+Author: Tran Doan Viet Anh
+Language: English (Professional Academic Quality)
 """
 
 import os
@@ -16,26 +17,26 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
-# Bảng màu chuẩn từ file PDF LaTeX sample report
-COLOR_PRIMARY_BLUE = RGBColor(11, 79, 138)       # #0B4F8A - Màu xanh Phenikaa/LaTeX
-COLOR_TOPIC_BLUE = RGBColor(41, 128, 185)         # #2980B9 - Màu xanh đề tài italic
-COLOR_DARK_TEXT = RGBColor(33, 33, 33)           # #212121 - Màu chữ nội dung chính
-COLOR_MUTED_GRAY = RGBColor(120, 120, 120)       # #787878 - Màu chữ ghi chú, số dòng
-COLOR_WHITE = RGBColor(255, 255, 255)            # #FFFFFF - Trắng
+# Official Color Palette from LaTeX PDF sample report
+COLOR_PRIMARY_BLUE = RGBColor(11, 79, 138)       # #0B4F8A - Academic Deep Navy Blue
+COLOR_TOPIC_BLUE = RGBColor(41, 128, 185)         # #2980B9 - Topic Subtitle Blue
+COLOR_DARK_TEXT = RGBColor(33, 33, 33)           # #212121 - Body Text
+COLOR_MUTED_GRAY = RGBColor(120, 120, 120)       # #787878 - Line Numbers & Footers
+COLOR_WHITE = RGBColor(255, 255, 255)            # #FFFFFF - Pure White
 
 FONT_FAMILY = "Times New Roman"
 FONT_CODE = "Consolas"
 
 
 def set_cell_background(cell, fill_hex):
-    """Thiết lập màu nền cho ô trong bảng."""
+    """Set background color for a table cell."""
     tcPr = cell._element.get_or_add_tcPr()
     shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{fill_hex}"/>')
     tcPr.append(shd)
 
 
 def set_cell_margins(cell, top=120, bottom=120, left=150, right=150):
-    """Thiết lập padding (khoảng đệm lề) cho ô."""
+    """Set inner padding for a table cell."""
     tcPr = cell._element.get_or_add_tcPr()
     tcMar = parse_xml(f'<w:tcMar {nsdecls("w")}>'
                       f'<w:top w:w="{top}" w:type="dxa"/>'
@@ -47,7 +48,7 @@ def set_cell_margins(cell, top=120, bottom=120, left=150, right=150):
 
 
 def set_table_borders(table, color="7F8C8D", sz="6", val="single"):
-    """Thiết lập đường kẻ viền thanh mảnh chuẩn học thuật."""
+    """Set clean academic borders on table."""
     tblPr = table._element.xpath('w:tblPr')
     if tblPr:
         borders = parse_xml(
@@ -63,13 +64,13 @@ def set_table_borders(table, color="7F8C8D", sz="6", val="single"):
         tblPr[0].append(borders)
 
 
-def add_callout_note(doc, title="Lưu ý (Note)", text=""):
-    """Tạo hộp Callout Note nền đỏ/hồng viền đỏ chuẩn giao diện LaTeX."""
+def add_callout_note(doc, title="Note", text=""):
+    """Create a LaTeX-styled Callout Note box with Crimson red header and soft background."""
     table = doc.add_table(rows=2, cols=1)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
-    
-    # Header Note: Nền đỏ (#C0392B), chữ trắng in đậm
+
+    # Header cell
     cell_hdr = table.cell(0, 0)
     cell_hdr.width = Inches(6.5)
     set_cell_background(cell_hdr, "C0392B")
@@ -82,8 +83,8 @@ def add_callout_note(doc, title="Lưu ý (Note)", text=""):
     r_h.font.size = Pt(10.5)
     r_h.font.bold = True
     r_h.font.color.rgb = COLOR_WHITE
-    
-    # Body Note: Nền hồng nhạt (#FDEDEC), viền đỏ
+
+    # Body cell
     cell_body = table.cell(1, 0)
     cell_body.width = Inches(6.5)
     set_cell_background(cell_body, "FDEDEC")
@@ -96,8 +97,8 @@ def add_callout_note(doc, title="Lưu ý (Note)", text=""):
     r_b.font.name = FONT_FAMILY
     r_b.font.size = Pt(10)
     r_b.font.color.rgb = COLOR_DARK_TEXT
-    
-    # Viền bảng Note
+
+    # Border definitions
     for r in table.rows:
         for c in r.cells:
             tcPr = c._element.get_or_add_tcPr()
@@ -111,24 +112,22 @@ def add_callout_note(doc, title="Lưu ý (Note)", text=""):
             )
             tcPr.append(bdr)
 
-    # Thêm khoảng cách sau hộp Note
     p_space = doc.add_paragraph()
     p_space.paragraph_format.space_before = Pt(0)
     p_space.paragraph_format.space_after = Pt(8)
 
 
 def add_code_listing(doc, code_text, caption_text, listing_no=1):
-    """Tạo khung hiển thị Code Listing có số dòng và viền xám thanh lịch."""
+    """Render a clean code listing box with line numbers and subtle border."""
     table = doc.add_table(rows=1, cols=1)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
-    
+
     cell = table.cell(0, 0)
     cell.width = Inches(6.5)
     set_cell_background(cell, "F8F9FA")
     set_cell_margins(cell, top=120, bottom=120, left=160, right=160)
-    
-    # Viền bao quanh khung code
+
     tcPr = cell._element.get_or_add_tcPr()
     borders = parse_xml(
         f'<w:tcBorders {nsdecls("w")}>'
@@ -139,7 +138,7 @@ def add_code_listing(doc, code_text, caption_text, listing_no=1):
         f'</w:tcBorders>'
     )
     tcPr.append(borders)
-    
+
     lines = code_text.strip().split('\n')
     for i, line in enumerate(lines, 1):
         if i == 1:
@@ -149,20 +148,20 @@ def add_code_listing(doc, code_text, caption_text, listing_no=1):
         p.paragraph_format.space_before = Pt(0)
         p.paragraph_format.space_after = Pt(2)
         p.paragraph_format.line_spacing = 1.15
-            
-        # Số dòng (màu xám)
+
+        # Line number
         run_num = p.add_run(f"{i:2d}  ")
         run_num.font.name = FONT_CODE
         run_num.font.size = Pt(9)
         run_num.font.color.rgb = COLOR_MUTED_GRAY
-        
-        # Nội dung code
+
+        # Code content
         run_code = p.add_run(line)
         run_code.font.name = FONT_CODE
         run_code.font.size = Pt(9)
         run_code.font.color.rgb = COLOR_DARK_TEXT
 
-    # Caption dưới Listing
+    # Caption
     p_cap = doc.add_paragraph()
     p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_cap.paragraph_format.space_before = Pt(4)
@@ -174,124 +173,119 @@ def add_code_listing(doc, code_text, caption_text, listing_no=1):
     run_cap.font.color.rgb = RGBColor(70, 70, 70)
 
 
-def build_vietnamese_report_docx():
+def build_english_report_docx():
     doc = Document()
 
-    # Thiết lập lề chuẩn trang (Margins: 1 inch = 2.54cm)
+    # Configure page geometry (Standard 1 inch margins)
     for section in doc.sections:
         section.top_margin = Inches(1.0)
         section.bottom_margin = Inches(1.0)
         section.left_margin = Inches(1.0)
         section.right_margin = Inches(1.0)
         section.different_first_page_header_footer = True
-        
-        # Header cho trang 2 trở đi
+
+        # Running Header for Page 2+
         hdr = section.header
         p_hdr = hdr.paragraphs[0]
         p_hdr.paragraph_format.space_after = Pt(2)
         p_hdr.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
-        
+
         r_hl = p_hdr.add_run("CSE703095 – Software Requirements")
         r_hl.font.name = FONT_FAMILY
         r_hl.font.size = Pt(9)
         r_hl.font.color.rgb = COLOR_MUTED_GRAY
-        
-        r_hr = p_hdr.add_run("\tBáo cáo thực hành Lab 01")
+
+        r_hr = p_hdr.add_run("\tLab 1 Report")
         r_hr.font.name = FONT_FAMILY
         r_hr.font.size = Pt(9)
         r_hr.font.color.rgb = COLOR_MUTED_GRAY
-        
-        # Footer cho trang 2 trở đi
+
+        # Running Footer for Page 2+
         ftr = section.footer
         p_ftr = ftr.paragraphs[0]
         p_ftr.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
-        
-        r_fl = p_ftr.add_run("Khoa Hệ thống Thông tin – Trường Đại học Phenikaa")
+
+        r_fl = p_ftr.add_run("School of Information Systems – Phenikaa University")
         r_fl.font.name = FONT_FAMILY
         r_fl.font.size = Pt(9)
         r_fl.font.color.rgb = COLOR_MUTED_GRAY
 
     # =============================================================
-    # TRANG 1: TRANG BÌA (COVER PAGE)
+    # PAGE 1: COVER PAGE
     # =============================================================
     p_uni = doc.add_paragraph()
     p_uni.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_uni.paragraph_format.space_before = Pt(20)
     p_uni.paragraph_format.space_after = Pt(4)
-    r_u1 = p_uni.add_run("TRƯỜNG ĐẠI HỌC PHENIKAA\nKHOA HỆ THỐNG THÔNG TIN\n")
+    r_u1 = p_uni.add_run("PHENIKAA UNIVERSITY\nSCHOOL OF INFORMATION SYSTEMS")
     r_u1.font.name = FONT_FAMILY
     r_u1.font.size = Pt(12)
     r_u1.font.bold = True
     r_u1.font.color.rgb = COLOR_DARK_TEXT
 
-    r_u2 = p_uni.add_run("PHENIKAA UNIVERSITY • SCHOOL OF INFORMATION SYSTEMS")
-    r_u2.font.name = FONT_FAMILY
-    r_u2.font.size = Pt(9.5)
-    r_u2.font.color.rgb = COLOR_MUTED_GRAY
-
-    # Đường kẻ xanh thương hiệu Phenikaa
+    # Phenikaa Blue Horizontal Rule
     p_line = doc.add_paragraph()
     p_line.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_line.paragraph_format.space_after = Pt(65)
     p_line_bdr = parse_xml(f'<w:pBdr {nsdecls("w")}><w:bottom w:val="single" w:sz="18" w:space="1" w:color="0B4F8A"/></w:pBdr>')
     p_line._element.get_or_add_pPr().append(p_line_bdr)
 
-    # Tiêu đề môn học
+    # Course Information
     p_course = doc.add_paragraph()
     p_course.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_course.paragraph_format.space_after = Pt(24)
-    r_c1 = p_course.add_run("HỌC PHẦN CSE703095\n")
+    r_c1 = p_course.add_run("COURSE CSE703095\n")
     r_c1.font.name = FONT_FAMILY
     r_c1.font.size = Pt(14)
     r_c1.font.bold = True
     r_c1.font.color.rgb = COLOR_DARK_TEXT
 
-    r_c2 = p_course.add_run("KỸ THUẬT YÊU CẦU PHẦN MỀM (SOFTWARE REQUIREMENTS)")
+    r_c2 = p_course.add_run("SOFTWARE REQUIREMENTS")
     r_c2.font.name = FONT_FAMILY
     r_c2.font.size = Pt(16)
     r_c2.font.bold = True
     r_c2.font.color.rgb = COLOR_PRIMARY_BLUE
 
-    # Tiêu đề Báo cáo Lab 01
+    # Report Title
     p_title = doc.add_paragraph()
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_title.paragraph_format.space_before = Pt(25)
     p_title.paragraph_format.space_after = Pt(6)
-    r_t1 = p_title.add_run("BÁO CÁO THỰC HÀNH – LAB 01\n")
+    r_t1 = p_title.add_run("LAB REPORT – LAB 01\n")
     r_t1.font.name = FONT_FAMILY
     r_t1.font.size = Pt(22)
     r_t1.font.bold = True
     r_t1.font.color.rgb = COLOR_PRIMARY_BLUE
 
-    r_t2 = p_title.add_run("Quy trình Kỹ thuật Yêu cầu & Khởi động Dự án\n(RE Process & Project Kickoff)\n")
+    r_t2 = p_title.add_run("RE Process & Project Kickoff\n")
     r_t2.font.name = FONT_FAMILY
     r_t2.font.size = Pt(14)
     r_t2.font.bold = True
     r_t2.font.color.rgb = COLOR_DARK_TEXT
 
-    # Chủ đề phụ (Topic)
+    # Topic Subtitle
     p_sub = doc.add_paragraph()
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_sub.paragraph_format.space_after = Pt(50)
-    r_sub = p_sub.add_run("Chủ đề: Khởi động dự án MedBook & Phân tích ma trận Stakeholders Power/Interest")
+    r_sub = p_sub.add_run("Topic: Project Kickoff & Stakeholder Power/Interest Analysis")
     r_sub.font.name = FONT_FAMILY
     r_sub.font.size = Pt(11)
     r_sub.font.italic = True
     r_sub.font.color.rgb = COLOR_TOPIC_BLUE
 
-    # Khối thông tin chi tiết
+    # Metadata Block
     p_meta = doc.add_paragraph()
     p_meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_meta.paragraph_format.space_after = Pt(100)
     p_meta.paragraph_format.line_spacing = 1.35
-    
+
     meta_data = [
-        ("Dự án nghiên cứu tình huống (Case study): ", True),
+        ("Case study project: ", True),
         ("MedBook – Online Medical Appointment Booking System\n", False),
-        ("Người thực hiện (Prepared by): ", True),
-        ("Trần Doãn Việt Anh\n", False),
-        ("Ngày nộp báo cáo (Date): ", True),
-        ("26/08/2026\n", False)
+        ("Prepared by: ", True),
+        ("Tran Doan Viet Anh\n", False),
+        ("Date: ", True),
+        ("2026-08-26\n", False)
     ]
     for text, bold in meta_data:
         rm = p_meta.add_run(text)
@@ -300,11 +294,11 @@ def build_vietnamese_report_docx():
         rm.font.bold = bold
         rm.font.color.rgb = COLOR_DARK_TEXT
 
-    # Dòng cuối trang bìa
+    # Bottom Cover Line
     p_bot = doc.add_paragraph()
     p_bot.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_bot.paragraph_format.space_after = Pt(0)
-    r_bot = p_bot.add_run("Tài liệu thực hành học phần Kỹ thuật Yêu cầu Phần mềm – Đại học Phenikaa")
+    r_bot = p_bot.add_run("Prepared for teaching & practice in the Software Requirements course")
     r_bot.font.name = FONT_FAMILY
     r_bot.font.size = Pt(9.5)
     r_bot.font.italic = True
@@ -313,38 +307,38 @@ def build_vietnamese_report_docx():
     doc.add_page_break()
 
     # =============================================================
-    # TRANG 2: MỤC LỤC (CONTENTS)
+    # PAGE 2: TABLE OF CONTENTS
     # =============================================================
     p_toc_title = doc.add_paragraph()
     p_toc_title.paragraph_format.space_before = Pt(10)
     p_toc_title.paragraph_format.space_after = Pt(18)
-    r_toc = p_toc_title.add_run("Mục lục (Contents)")
+    r_toc = p_toc_title.add_run("Contents")
     r_toc.font.name = FONT_FAMILY
     r_toc.font.size = Pt(16)
     r_toc.font.bold = True
     r_toc.font.color.rgb = COLOR_PRIMARY_BLUE
 
     toc_entries = [
-        ("1  Thông tin chung (General Information)", "2", True),
-        ("2  Điều lệ dự án rút gọn (Condensed Project Charter)", "2", True),
-        ("3  Phân tích các bên liên quan (Stakeholder Analysis)", "2", True),
-        ("    3.1  Kết quả thực thi chương trình (Program Output)", "2", False),
-        ("4  Mã nguồn mở rộng & Kiểm thử (Extension Code)", "3", True),
-        ("5  Tự đánh giá theo tiêu chí chấm điểm (Self-assessment Against Grading Criteria)", "3", True),
-        ("6  Kết luận & Hướng phát triển (Conclusion)", "3", True)
+        ("1  General Information", "2", True),
+        ("2  Condensed Project Charter", "2", True),
+        ("3  Stakeholder Analysis", "2", True),
+        ("    3.1  Program Output", "2", False),
+        ("4  Extension Code", "3", True),
+        ("5  Self-assessment Against Grading Criteria", "3", True),
+        ("6  Conclusion", "3", True)
     ]
     for title, pg, is_bold in toc_entries:
         p_item = doc.add_paragraph()
         p_item.paragraph_format.space_before = Pt(3)
         p_item.paragraph_format.space_after = Pt(3)
         p_item.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
-        
+
         r_t = p_item.add_run(title)
         r_t.font.name = FONT_FAMILY
         r_t.font.size = Pt(11)
         r_t.font.bold = is_bold
         r_t.font.color.rgb = COLOR_PRIMARY_BLUE if is_bold else COLOR_DARK_TEXT
-        
+
         r_p = p_item.add_run(f"\t{pg}")
         r_p.font.name = FONT_FAMILY
         r_p.font.size = Pt(11)
@@ -354,22 +348,23 @@ def build_vietnamese_report_docx():
     doc.add_page_break()
 
     # =============================================================
-    # TRANG 3: NỘI DUNG CHÍNH (PHẦN 1, 2, 3)
+    # PAGE 3: SECTIONS 1, 2, 3
     # =============================================================
-    # Hộp Callout Note
+    # Note Callout Box
     add_callout_note(
         doc,
-        title="Lưu ý (Note)",
-        text="Bản báo cáo này được hoàn thiện độc lập dựa trên việc phân tích bài toán thực tế của hệ thống MedBook, "
-             "áp dụng đúng chuẩn mực quy trình kỹ thuật yêu cầu và ma trận phân tích bên liên quan (Power/Interest Grid). "
-             "Toàn bộ số liệu, mục tiêu và phạm vi được xây dựng riêng biệt, không sao chép nguyên văn tài liệu mẫu."
+        title="Note",
+        text="This report has been prepared independently based on the domain analysis of the MedBook system, "
+             "strictly complying with Requirements Engineering standards and the Stakeholder Power/Interest Grid. "
+             "All quantitative indicators, project goals, and scope boundaries have been customized independently "
+             "without copying verbatim from the sample benchmark."
     )
 
-    # 1. Thông tin chung
+    # 1. General Information
     p_h1 = doc.add_heading(level=1)
     p_h1.paragraph_format.space_before = Pt(12)
     p_h1.paragraph_format.space_after = Pt(6)
-    r1 = p_h1.add_run("1  Thông tin chung (General Information)")
+    r1 = p_h1.add_run("1  General Information")
     r1.font.name = FONT_FAMILY
     r1.font.size = Pt(14)
     r1.font.bold = True
@@ -379,19 +374,18 @@ def build_vietnamese_report_docx():
     p_g.paragraph_format.space_after = Pt(12)
     p_g.paragraph_format.line_spacing = 1.2
     rg = p_g.add_run(
-        "Sinh viên Trần Doãn Việt Anh đã hoàn thành nội dung bài thực hành Lab 1 đối với bài toán tình huống hệ thống MedBook "
-        "(Hệ thống đặt lịch khám bệnh trực tuyến), tập trung vào hai trọng tâm chính: khởi động dự án "
-        "(project kickoff), xây dựng điều lệ dự án rút gọn và phân tích phân loại các bên liên quan (stakeholder analysis)."
+        "Tran Doan Viet Anh completed all requirements of Lab 01 for the MedBook – Online Medical Appointment Booking System "
+        "case study, focusing on project kickoff, condensed project charter formulation, and stakeholder classification."
     )
     rg.font.name = FONT_FAMILY
     rg.font.size = Pt(10.5)
     rg.font.color.rgb = COLOR_DARK_TEXT
 
-    # 2. Điều lệ dự án rút gọn
+    # 2. Condensed Project Charter
     p_h2 = doc.add_heading(level=1)
     p_h2.paragraph_format.space_before = Pt(12)
     p_h2.paragraph_format.space_after = Pt(6)
-    r2 = p_h2.add_run("2  Điều lệ dự án rút gọn (Condensed Project Charter)")
+    r2 = p_h2.add_run("2  Condensed Project Charter")
     r2.font.name = FONT_FAMILY
     r2.font.size = Pt(14)
     r2.font.bold = True
@@ -402,22 +396,22 @@ def build_vietnamese_report_docx():
     table_charter.autofit = False
     set_table_borders(table_charter, color="7F8C8D", sz="6")
 
-    charter_rows_vi = [
-        ("Mục tiêu dự án\n(Project goal)", 
-         "Xây dựng và đưa vào vận hành nền tảng đặt lịch khám bệnh trực tuyến MedBook nhằm số hóa toàn diện quy trình tiếp nhận bệnh nhân; mục tiêu giảm 75% thời gian chờ đợi tại quầy thủ tục và cắt giảm 85% lượng cuộc gọi đặt hẹn thủ công qua tổng đài trong vòng 6 tháng kể từ khi triển khai chính thức."),
-        ("Phạm vi dự án\n(Scope)", 
-         "Trong phạm vi GĐ1 (In-scope): Tìm kiếm bác sĩ và đặt/hủy/dời lịch khám trực tuyến theo khung giờ thực, quản lý hồ sơ y bạ điện tử cá nhân, tự động nhắc lịch qua SMS/Email, xuất báo cáo công suất tiếp nhận.\nNgoài phạm vi (Out-of-scope): Cổng thanh toán viện phí trực tuyến & đồng bộ thanh quyết toán Bảo hiểm Y tế (chuyển sang Giai đoạn 2)."),
-        ("Ràng buộc\n(Constraints)", 
-         "Ngân sách giới hạn theo dự toán đầu tư CNTT Giai đoạn 1; bắt buộc tuân thủ Luật Khám bệnh, chữa bệnh số 15/2023/QH15, Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân y tế; thời hạn hoàn thành và nghiệm thu UAT trong 5 tháng."),
-        ("Tiêu chí thành công\n(Success criteria)", 
-         "Tỷ lệ sẵn sàng của hệ thống (Uptime) \u2265 99.8%; 0 sự cố vi phạm bảo mật dữ liệu y tế trong 12 tháng đầu; điểm chỉ số hài lòng người dùng NPS \u2265 45 và CSAT \u2265 88%; \u2265 70% bệnh nhân ngoại trú tự đặt khám trực tuyến sau 6 tháng.")
+    charter_rows_en = [
+        ("Project goal",
+         "Build and deploy the MedBook online appointment booking platform to fully digitize patient intake workflows; target reducing patient waiting time at front-desk counters by 75% and decreasing manual appointment calls to the hospital call center by 85% within 6 months of official launch."),
+        ("Scope",
+         "In-scope (Phase 1): Search for specialists and book, reschedule, or cancel appointments in real-time; electronic personal health record management, clinical visit history, and prescription viewing; automated SMS/Email appointment reminders; departmental operational dashboard.\nExcludes online payment gateway integration and direct automated health insurance claims processing (phase 2)."),
+        ("Constraints",
+         "Strict adherence to Phase 1 allocated IT capital expenditure; 5-month delivery timeline for development, technical acceptance, and User Acceptance Testing (UAT); mandatory compliance with Law on Medical Examination and Treatment No. 15/2023/QH15 and Decree 13/2023/ND-CP on Personal Data Protection."),
+        ("Success criteria",
+         "System availability (Uptime) \u2265 99.8%; zero patient medical record security breaches or data leaks in the first 12 months (0 breaches); patient and medical staff satisfaction ratings NPS \u2265 45 and CSAT \u2265 88%; at least 70% of outpatient consultations scheduled via the online system after 6 months.")
     ]
 
-    for idx, (head, desc) in enumerate(charter_rows_vi):
+    for idx, (head, desc) in enumerate(charter_rows_en):
         row = table_charter.rows[idx]
-        
+
         c0 = row.cells[0]
-        c0.width = Inches(2.0)
+        c0.width = Inches(1.8)
         set_cell_background(c0, "F2F4F4")
         set_cell_margins(c0, top=100, bottom=100, left=120, right=120)
         p0 = c0.paragraphs[0]
@@ -428,9 +422,9 @@ def build_vietnamese_report_docx():
         r0.font.size = Pt(10)
         r0.font.bold = True
         r0.font.color.rgb = COLOR_DARK_TEXT
-        
+
         c1 = row.cells[1]
-        c1.width = Inches(4.5)
+        c1.width = Inches(4.7)
         set_cell_margins(c1, top=100, bottom=100, left=120, right=120)
         p1 = c1.paragraphs[0]
         p1.paragraph_format.space_after = Pt(0)
@@ -442,11 +436,11 @@ def build_vietnamese_report_docx():
 
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
-    # 3. Phân tích các bên liên quan
+    # 3. Stakeholder Analysis
     p_h3 = doc.add_heading(level=1)
     p_h3.paragraph_format.space_before = Pt(12)
     p_h3.paragraph_format.space_after = Pt(6)
-    r3 = p_h3.add_run("3  Phân tích các bên liên quan (Stakeholder Analysis)")
+    r3 = p_h3.add_run("3  Stakeholder Analysis")
     r3.font.name = FONT_FAMILY
     r3.font.size = Pt(14)
     r3.font.bold = True
@@ -456,20 +450,19 @@ def build_vietnamese_report_docx():
     p_sh.paragraph_format.space_after = Pt(8)
     p_sh.paragraph_format.line_spacing = 1.2
     r_sh = p_sh.add_run(
-        "Áp dụng ma trận Quyền lực / Mức độ quan tâm (Power/Interest Grid), tác giả xác nhận có "
-        "4/8 bên liên quan thuộc nhóm chiến lược tối quan trọng \"Manage Closely\" (Bệnh nhân, Bác sĩ, Ban Quản trị bệnh viện, "
-        "Đội ngũ Phát triển phần mềm) \u2013 nhóm đối tượng này đòi hỏi phải được liên tục tham vấn và phỏng vấn chuyên sâu "
-        "trong các bài thực hành tiếp theo (đặc biệt là Lab 2 \u2013 Khơi mở và thu thập yêu cầu / Elicitation)."
+        "Applying the Power/Interest grid, the author confirmed that 4 out of 8 stakeholders fall into "
+        "\"Manage Closely\" (Patient, Doctor, Hospital Administrator, Development team) \u2013 this group requires continuous "
+        "consultation and in-depth interviews in subsequent labs (especially Lab 2 \u2013 Requirements Elicitation)."
     )
     r_sh.font.name = FONT_FAMILY
     r_sh.font.size = Pt(10.5)
     r_sh.font.color.rgb = COLOR_DARK_TEXT
 
-    # 3.1 Kết quả thực thi chương trình
+    # 3.1 Program Output
     p_h31 = doc.add_heading(level=2)
     p_h31.paragraph_format.space_before = Pt(8)
     p_h31.paragraph_format.space_after = Pt(6)
-    r31 = p_h31.add_run("3.1  Kết quả thực thi chương trình (Program Output)")
+    r31 = p_h31.add_run("3.1  Program Output")
     r31.font.name = FONT_FAMILY
     r31.font.size = Pt(12)
     r31.font.bold = True
@@ -482,18 +475,18 @@ def build_vietnamese_report_docx():
         "  - Keep Informed: 2 stakeholder(s)\n"
         "[OK] Exported: stakeholder_register.md"
     )
-    add_code_listing(doc, output_console_text, "Kết quả xuất ra màn hình Console từ stakeholder_register.py", listing_no=1)
+    add_code_listing(doc, output_console_text, "Console output from stakeholder_register.py", listing_no=1)
 
     doc.add_page_break()
 
     # =============================================================
-    # TRANG 4: PHẦN 4, 5, 6
+    # PAGE 4: SECTIONS 4, 5, 6
     # =============================================================
-    # 4. Mã nguồn mở rộng & Kiểm thử
+    # 4. Extension Code
     p_h4 = doc.add_heading(level=1)
     p_h4.paragraph_format.space_before = Pt(10)
     p_h4.paragraph_format.space_after = Pt(6)
-    r4 = p_h4.add_run("4  Mã nguồn mở rộng & Kiểm thử (Extension Code)")
+    r4 = p_h4.add_run("4  Extension Code")
     r4.font.name = FONT_FAMILY
     r4.font.size = Pt(14)
     r4.font.bold = True
@@ -503,8 +496,8 @@ def build_vietnamese_report_docx():
     p_ext.paragraph_format.space_after = Pt(8)
     p_ext.paragraph_format.line_spacing = 1.2
     r_ext = p_ext.add_run(
-        "Tác giả đã phát triển thêm hàm mở rộng export_to_csv() và bộ kiểm thử tự động (assert test suite) "
-        "nhằm kiểm tra độ chính xác của hàm classify() đối với toàn bộ 4 trường hợp góc biên của ma trận Power/Interest:"
+        "The author added an export_to_csv() function and an assert unit test suite checking classify() "
+        "against all 4 boundary combinations of the Power/Interest Grid:"
     )
     r_ext.font.name = FONT_FAMILY
     r_ext.font.size = Pt(10.5)
@@ -523,13 +516,13 @@ def build_vietnamese_report_docx():
         "    print(\"All tests PASS\")\n\n"
         "test_classify()"
     )
-    add_code_listing(doc, code_test_text, "Mã kiểm thử tự động xác thực các trường hợp biên của hàm classify()", listing_no=2)
+    add_code_listing(doc, code_test_text, "Test suite checking classify() boundary cases", listing_no=2)
 
-    # 5. Tự đánh giá theo tiêu chí chấm điểm
+    # 5. Self-assessment Against Grading Criteria
     p_h5 = doc.add_heading(level=1)
     p_h5.paragraph_format.space_before = Pt(14)
     p_h5.paragraph_format.space_after = Pt(6)
-    r5 = p_h5.add_run("5  Tự đánh giá theo tiêu chí chấm điểm (Self-assessment Against Grading Criteria)")
+    r5 = p_h5.add_run("5  Self-assessment Against Grading Criteria")
     r5.font.name = FONT_FAMILY
     r5.font.size = Pt(14)
     r5.font.bold = True
@@ -540,12 +533,11 @@ def build_vietnamese_report_docx():
     table_score.autofit = False
     set_table_borders(table_score, color="7F8C8D", sz="6")
 
-    score_headers_vi = ["Tiêu chí đánh giá (Criterion)", "Điểm tối đa", "Tự chấm", "Ghi chú minh chứng (Notes)"]
+    score_headers_en = ["Criterion", "Max", "Self-score", "Notes"]
     col_widths = [Inches(2.5), Inches(0.9), Inches(0.9), Inches(2.2)]
 
-    # Hàng tiêu đề bảng điểm
     hdr_cells = table_score.rows[0].cells
-    for i, title in enumerate(score_headers_vi):
+    for i, title in enumerate(score_headers_en):
         hdr_cells[i].width = col_widths[i]
         set_cell_background(hdr_cells[i], "EAECEE")
         set_cell_margins(hdr_cells[i], top=100, bottom=100, left=100, right=100)
@@ -559,23 +551,22 @@ def build_vietnamese_report_docx():
         r.font.bold = True
         r.font.color.rgb = COLOR_DARK_TEXT
 
-    score_rows_vi = [
-        ("Bản Điều lệ dự án đầy đủ, rõ ràng (Complete, clear Project Charter)", "2.0", "2.0", "Đầy đủ cả 4 phần bắt buộc với chỉ số đo lường"),
-        ("Phân loại Stakeholders chính xác (Accurate stakeholder classification)", "3.0", "3.0", "Khớp hoàn toàn với kết quả từ mã nguồn tự động"),
-        ("Script chạy đúng, không lỗi (Script runs correctly, no errors)", "3.0", "3.0", "Đã xác thực và vượt qua toàn bộ assert tests"),
-        ("Chất lượng trình bày báo cáo (Report quality)", "2.0", "2.0", "Định dạng chuẩn, màu sắc & bố cục đồng nhất"),
-        ("Tổng điểm (Total)", "10.0", "10.0", "Đạt trọn vẹn toàn bộ yêu cầu của bài Lab 01")
+    score_rows_en = [
+        ("Complete, clear Project Charter", "2.0", "2.0", "All 4 sections present with distinct metrics"),
+        ("Accurate stakeholder classification", "3.0", "3.0", "Matches automated script output 100%"),
+        ("Script runs correctly, no errors", "3.0", "3.0", "Verified with 4 assert unit tests"),
+        ("Report quality", "2.0", "2.0", "Clean formatting, matching sample template"),
+        ("Total", "10.0", "10.0", "Fully achieved all Lab 01 requirements")
     ]
 
-    for idx, (crit, max_s, self_s, note) in enumerate(score_rows_vi, 1):
+    for idx, (crit, max_s, self_s, note) in enumerate(score_rows_en, 1):
         cells = table_score.rows[idx].cells
         for i in range(4):
             cells[i].width = col_widths[i]
             set_cell_margins(cells[i], top=80, bottom=80, left=100, right=100)
-            if idx == 5:  # Hàng Tổng kết
+            if idx == 5:
                 set_cell_background(cells[i], "F2F4F4")
 
-        # Cột Tiêu chí
         p0 = cells[0].paragraphs[0]
         p0.paragraph_format.space_after = Pt(0)
         r0 = p0.add_run(crit)
@@ -585,7 +576,6 @@ def build_vietnamese_report_docx():
         if idx == 5:
             r0.font.bold = True
 
-        # Cột Điểm tối đa
         p1 = cells[1].paragraphs[0]
         p1.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p1.paragraph_format.space_after = Pt(0)
@@ -596,7 +586,6 @@ def build_vietnamese_report_docx():
         if idx == 5:
             r1.font.bold = True
 
-        # Cột Tự chấm
         p2 = cells[2].paragraphs[0]
         p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p2.paragraph_format.space_after = Pt(0)
@@ -607,7 +596,6 @@ def build_vietnamese_report_docx():
         if idx == 5:
             r2.font.bold = True
 
-        # Cột Ghi chú
         p3 = cells[3].paragraphs[0]
         p3.paragraph_format.space_after = Pt(0)
         r3 = p3.add_run(note)
@@ -617,11 +605,11 @@ def build_vietnamese_report_docx():
 
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
-    # 6. Kết luận
+    # 6. Conclusion
     p_h6 = doc.add_heading(level=1)
     p_h6.paragraph_format.space_before = Pt(12)
     p_h6.paragraph_format.space_after = Pt(6)
-    r6 = p_h6.add_run("6  Kết luận & Hướng phát triển (Conclusion)")
+    r6 = p_h6.add_run("6  Conclusion")
     r6.font.name = FONT_FAMILY
     r6.font.size = Pt(14)
     r6.font.bold = True
@@ -631,26 +619,25 @@ def build_vietnamese_report_docx():
     p_concl.paragraph_format.space_after = Pt(12)
     p_concl.paragraph_format.line_spacing = 1.2
     r_concl = p_concl.add_run(
-        "Tác giả đã đạt được trọn vẹn các mục tiêu đề ra cho bài Lab 1, đồng thời sở hữu bộ dữ liệu "
-        "các bên liên quan đã được phân loại chuẩn xác theo chiến lược quản lý, sẵn sàng làm dữ liệu đầu vào "
-        "cho bài Lab 2 (thu thập và khơi mở yêu cầu theo mức độ ưu tiên của từng nhóm đối tượng stakeholder)."
+        "The author fully achieved the Lab 1 objectives and now has a classified stakeholder dataset "
+        "ready for reuse in Lab 2 (elicitation prioritized by stakeholder group)."
     )
     r_concl.font.name = FONT_FAMILY
     r_concl.font.size = Pt(10.5)
     r_concl.font.color.rgb = COLOR_DARK_TEXT
 
-    # Xuất file ra thư mục report/
+    # Save to report directory
     out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "report")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "lab01_report.docx")
     try:
         doc.save(out_path)
-        print(f"[OK] Đã xuất thành công file DOCX tại: {out_path}")
+        print(f"[OK] Successfully generated English DOCX report at: {out_path}")
     except PermissionError:
         alt_path = os.path.join(out_dir, "lab01_report_revised.docx")
         doc.save(alt_path)
-        print(f"[OK] File ban đầu đang mở, đã lưu phiên bản mới tại: {alt_path}")
+        print(f"[OK] Default file was locked; generated at: {alt_path}")
 
 
 if __name__ == "__main__":
-    build_vietnamese_report_docx()
+    build_english_report_docx()

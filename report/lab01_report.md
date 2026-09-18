@@ -1,62 +1,62 @@
-# TRƯỜNG ĐẠI HỌC PHENIKAA
-## KHOA HỆ THỐNG THÔNG TIN
-### HỌC PHẦN CSE703095 – KỸ THUẬT YÊU CẦU PHẦN MỀM
+# PHENIKAA UNIVERSITY
+## SCHOOL OF INFORMATION SYSTEMS
+### COURSE CSE703095 – SOFTWARE REQUIREMENTS
 
 ---
 
-# BÁO CÁO THỰC HÀNH – LAB 01
-## Quy trình Kỹ thuật Yêu cầu & Khởi động Dự án (RE Process & Project Kickoff)
+# LAB REPORT – LAB 01
+## RE Process & Project Kickoff
 
-- **Dự án nghiên cứu (Case study):** MedBook – Online Medical Appointment Booking System
-- **Người thực hiện:** Trần Doãn Việt Anh
-- **Ngày thực hiện:** 26/08/2026
-- **Giảng viên phụ trách:** Bộ môn Kỹ thuật Phần mềm & HTTT
-
----
-
-### Lưu ý (Note)
-> Bản báo cáo này được hoàn thiện độc lập dựa trên việc phân tích bài toán thực tế của hệ thống MedBook, áp dụng đúng chuẩn mực quy trình kỹ thuật yêu cầu và ma trận phân tích bên liên quan (Power/Interest Grid). Toàn bộ số liệu, mục tiêu và phạm vi được xây dựng riêng biệt, không sao chép nguyên văn tài liệu mẫu.
+- **Case study project:** MedBook – Online Medical Appointment Booking System
+- **Prepared by:** Tran Doan Viet Anh
+- **Date:** 2026-08-26
+- **Course Instructor:** Software Engineering & Information Systems Department
 
 ---
 
-### 1. Thông tin chung (General Information)
-Sinh viên **Trần Doãn Việt Anh** đã hoàn thành toàn bộ nội dung bài thực hành Lab 01 đối với đề tài nghiên cứu tình huống **MedBook – Hệ thống đặt lịch khám bệnh trực tuyến**. Trọng tâm của bài thực hành tập trung vào hai nhiệm vụ nền tảng trong giai đoạn khởi tạo phần mềm:
-1. Xây dựng bản **Điều lệ dự án rút gọn (Condensed Project Charter)** xác lập rõ ràng mục tiêu định lượng, phạm vi ranh giới, các ràng buộc cốt lõi và chỉ số thành công đo lường được.
-2. Thực hiện **Phân tích và Phân loại các bên liên quan (Stakeholder Analysis)** bằng ma trận Quyền lực / Mức độ quan tâm (**Power/Interest Grid**), kết hợp lập trình tự động hóa quy trình phân loại bằng ngôn ngữ Python.
+### Note
+> This report has been prepared independently based on the domain analysis of the MedBook system, strictly complying with Requirements Engineering standards and the Stakeholder Power/Interest Grid. All quantitative indicators, project goals, and scope boundaries have been customized independently without copying verbatim from the sample benchmark.
 
 ---
 
-### 2. Điều lệ dự án rút gọn (Condensed Project Charter)
+### 1. General Information
+Tran Doan Viet Anh completed all requirements of Lab 01 for the **MedBook – Online Medical Appointment Booking System** case study, focusing on two foundational kickoff activities in the Requirements Engineering process:
+1. Formulating a **Condensed Project Charter** that clearly establishes quantifiable goals, explicit scope boundaries (in-scope vs. out-of-scope), critical project constraints, and measurable success criteria.
+2. Conducting **Stakeholder Analysis & Classification** utilizing the **Power/Interest Grid**, complemented by an automated Python script to classify stakeholders and verify boundary cases.
 
-| Thành phần (Section) | Nội dung chi tiết được xác lập cho MedBook |
+---
+
+### 2. Condensed Project Charter
+
+| Section | Detailed Content for MedBook System |
 |---|---|
-| **Mục tiêu dự án**<br>*(Project goal)* | Xây dựng và đưa vào vận hành nền tảng đặt lịch khám bệnh trực tuyến MedBook nhằm số hóa toàn diện quy trình tiếp nhận bệnh nhân; mục tiêu giảm **75%** thời gian chờ đợi tại quầy thủ tục và cắt giảm **85%** lượng cuộc gọi đặt hẹn thủ công qua tổng đài trong vòng **6 tháng** kể từ khi triển khai chính thức. |
-| **Phạm vi dự án**<br>*(Scope)* | **Trong phạm vi Giai đoạn 1 (In-scope):**<br>- Cho phép người bệnh tìm kiếm bác sĩ chuyên khoa, đặt lịch, hủy lịch và dời lịch khám trực tuyến theo khung giờ thực (real-time).<br>- Quản lý hồ sơ y bạ điện tử cá nhân, lịch sử các lần khám và kết quả xét nghiệm/đơn thuốc.<br>- Tự động gửi thông báo nhắc lịch khám và hướng dẫn chuẩn bị trước khám qua SMS/Email.<br>- Phân hệ thống kê báo cáo công suất tiếp nhận của phòng khám dành cho bộ phận quản lý.<br><br>**Ngoài phạm vi / Giai đoạn 2 (Out-of-scope):**<br>- Tích hợp cổng thanh toán trực tuyến qua thẻ tín dụng/ví điện tử.<br>- Đồng bộ thanh quyết toán trực tuyến với hệ thống cổng Giám định Bảo hiểm Y tế quốc gia. |
-| **Ràng buộc**<br>*(Constraints)* | **Ngân sách:** Nằm trong hạn mức dự toán chi phí đầu tư CNTT Giai đoạn 1 đã được phê duyệt.<br>**Thời gian (Timeline):** Hoàn thành phát triển, nghiệm thu kỹ thuật và thử nghiệm người dùng (UAT) trong thời hạn **5 tháng**.<br>**Pháp lý & Tiêu chuẩn y tế:** Bắt buộc tuân thủ Luật Khám bệnh, chữa bệnh số 15/2023/QH15, Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân y tế, và các tiêu chuẩn bảo mật dữ liệu sức khỏe của Bộ Y tế. |
-| **Tiêu chí thành công**<br>*(Success criteria)* | - Tỷ lệ sẵn sàng và hoạt động ổn định của hệ thống (Uptime) $\ge 99.8\%$.<br>- Tuyệt đối không xảy ra bất kỳ sự cố rò rỉ hay thất thoát dữ liệu bệnh án cá nhân ($0$ vi phạm bảo mật dữ liệu y tế trong 12 tháng đầu).<br>- Chỉ số đo lường mức độ hài lòng của người bệnh và nhân viên y tế đạt $NPS \ge 45$ và $CSAT \ge 88\%$.<br>- Tỷ lệ người bệnh tự đặt khám trực tuyến thành công đạt $\ge 70\%$ tổng lượng bệnh nhân ngoại trú sau 6 tháng vận hành. |
+| **Project goal** | Build and deploy the MedBook online appointment booking platform to fully digitize patient intake workflows; target reducing patient waiting time at front-desk counters by **75%** and decreasing manual appointment calls to the hospital call center by **85%** within **6 months** of official launch. |
+| **Scope** | **In-scope (Phase 1):**<br>- Search for specialists and book, reschedule, or cancel appointments in real-time.<br>- Electronic personal health record management, clinical visit history, laboratory results, and prescription viewing.<br>- Automated SMS/Email appointment reminders and pre-visit clinical preparation instructions.<br>- Departmental operational dashboard and clinic capacity utilization reporting for administrative staff.<br><br>**Out-of-scope (Phase 2):**<br>- Online payment gateway integration via credit cards and digital e-wallets.<br>- Direct automated health insurance claims processing synchronized with the National Health Insurance portal. |
+| **Constraints** | **Budget:** Strict adherence to Phase 1 allocated IT capital expenditure.<br>**Timeline:** Complete system development, acceptance testing, and User Acceptance Testing (UAT) within a **5-month** delivery timeline.<br>**Regulatory & Compliance:** Mandatory compliance with Law on Medical Examination and Treatment No. 15/2023/QH15, Decree 13/2023/ND-CP on Personal Data Protection, and Ministry of Health healthcare data security regulations. |
+| **Success criteria** | - System availability (Uptime) $\ge 99.8\%$.<br>- Zero patient medical record security breaches or data leak incidents ($0$ breaches during the first 12 months).<br>- High satisfaction ratings from both patients and medical staff: $NPS \ge 45$ and $CSAT \ge 88\%$.<br>- At least $70\%$ of outpatient consultations scheduled via the online system after 6 months of operation. |
 
 ---
 
-### 3. Phân tích các bên liên quan (Stakeholder Analysis)
+### 3. Stakeholder Analysis
 
-Thông qua việc đánh giá hai chiều về **Quyền lực tác động (InfluenceLevel / Power)** và **Mức độ quan tâm (PriorityLevel / Interest)**, 8 bên liên quan nòng cốt của dự án MedBook được phân loại theo 4 chiến lược quản lý:
+By evaluating both dimensions—**Power (InfluenceLevel)** and **Interest (PriorityLevel)**, eight core stakeholders of the MedBook system were classified according to four management strategies:
 
-| Mã ID | Tên Stakeholder | Vai trò (Category) | Quyền lực (Power) | Mức quan tâm (Interest) | Chiến lược quản lý (Management Strategy) |
+| ID | Name | Category | Power | Interest | Management Strategy |
 |:---:|---|---|:---:|:---:|:---:|
-| **SH-01** | Patient *(Người bệnh)* | End user | High (3) | High (3) | **Manage Closely** *(Quản lý chặt chẽ)* |
-| **SH-02** | Doctor *(Bác sĩ)* | Internal user | High (3) | High (3) | **Manage Closely** *(Quản lý chặt chẽ)* |
-| **SH-03** | Receptionist / Front desk *(Lễ tân)* | Internal user | Medium (2) | Medium (2) | **Monitor** *(Theo dõi định kỳ)* |
-| **SH-04** | Hospital Administrator *(Ban giám đốc)* | System owner | High (3) | High (3) | **Manage Closely** *(Quản lý chặt chẽ)* |
-| **SH-05** | Health insurance provider *(Cơ quan BHYT)* | External stakeholder | Medium (2) | Low (1) | **Monitor** *(Theo dõi định kỳ)* |
-| **SH-06** | Hospital IT department *(Bộ phận IT)* | System operator | Medium (2) | High (3) | **Keep Informed** *(Cập nhật thông tin)* |
-| **SH-07** | Health regulatory authority *(Bộ Y tế)* | Legal/regulatory | Low (1) | High (3) | **Keep Informed** *(Cập nhật thông tin)* |
-| **SH-08** | Development team *(Đội ngũ phát triển)* | Delivery stakeholder | High (3) | High (3) | **Manage Closely** *(Quản lý chặt chẽ)* |
+| **SH-01** | Patient | End user | High (3) | High (3) | **Manage Closely** |
+| **SH-02** | Doctor | Internal user | High (3) | High (3) | **Manage Closely** |
+| **SH-03** | Receptionist / Front desk staff | Internal user | Medium (2) | Medium (2) | **Monitor** |
+| **SH-04** | Hospital Administrator | System owner | High (3) | High (3) | **Manage Closely** |
+| **SH-05** | Health insurance provider | External stakeholder | Medium (2) | Low (1) | **Monitor** |
+| **SH-06** | Hospital IT department | System operator | Medium (2) | High (3) | **Keep Informed** |
+| **SH-07** | Health regulatory authority | Legal/regulatory stakeholder | Low (1) | High (3) | **Keep Informed** |
+| **SH-08** | Development team | Delivery stakeholder | High (3) | High (3) | **Manage Closely** |
 
-#### Nhận xét phân tích:
-Kết quả phân loại chỉ ra rằng có **4/8 bên liên quan** thuộc nhóm chiến lược quan trọng nhất **"Manage Closely"** (Bệnh nhân, Bác sĩ, Ban Quản trị bệnh viện, Đội ngũ Phát triển phần mềm). Đây là nhóm đối tượng có mức độ ảnh hưởng trực tiếp đến sự thành bại của dự án và có quyền quyết định cao nhất. Do đó, nhóm này sẽ là lực lượng nòng cốt được ưu tiên tham vấn liên tục và thực hiện phỏng vấn chuyên sâu trong hoạt động **Khơi mở và Thu thập yêu cầu (Requirements Elicitation)** ở bài **Lab 02** tiếp theo.
+#### Analytical Assessment:
+The classification confirms that **4 out of 8 stakeholders** fall into the top-priority **"Manage Closely"** quadrant (Patient, Doctor, Hospital Administrator, Development team). These stakeholders possess both high authority to impact project outcomes and high interest in the solution. Consequently, this cohort will serve as the primary focus for continuous consultation and intensive interviews during the **Requirements Elicitation** phase in **Lab 02**.
 
-#### 3.1. Kết quả thực thi chương trình (Program Output)
-Dưới đây là kết quả Console Output thực tế thu được khi thực thi script `stakeholder_register.py`:
+#### 3.1. Program Output
+Below is the actual console output generated upon executing `stakeholder_register.py`:
 
 ```text
 Classification summary:
@@ -68,14 +68,14 @@ Classification summary:
 
 ---
 
-### 4. Mã nguồn mở rộng & Kiểm thử (Extension Code)
+### 4. Extension Code & Verification
 
-Nhằm đảm bảo tính chuẩn xác và nâng cao khả năng tái sử dụng của phần mềm, tác giả đã tích hợp thêm 2 module mở rộng vào script `stakeholder_register.py`:
+To verify algorithm correctness and enhance reusability, two extension modules were implemented in `stakeholder_register.py`:
 
-#### 4.1. Hàm xuất dữ liệu ra file CSV (`export_to_csv`):
+#### 4.1. CSV Export Module (`export_to_csv`):
 ```python
 def export_to_csv(rows, out_path):
-    """Hàm mở rộng: Xuất danh sách stakeholder đã phân loại ra file CSV."""
+    """Export classified stakeholders to a structured CSV file."""
     fieldnames = [
         "StakeholderID", "StakeholderName", "Category", 
         "InfluenceLevel", "PriorityLevel", "ManagementStrategy"
@@ -89,11 +89,11 @@ def export_to_csv(rows, out_path):
             writer.writerow(row_dict)
 ```
 
-#### 4.2. Bộ kiểm thử tự động (Unit Test Suite with Assert):
-Đoạn mã kiểm thử tự động xác thực thuật toán `classify()` trên toàn bộ 4 góc phần tư của ma trận Power/Interest Grid:
+#### 4.2. Automated Boundary Unit Test Suite (`test_classify`):
+An automated test suite verifying the `classify()` logic across all four boundary quadrants of the Power/Interest Grid:
 ```python
 def test_classify():
-    """Hàm kiểm thử tự động kiểm tra 4 góc biên của ma trận Power/Interest Grid."""
+    """Automated unit test suite checking all 4 boundary combinations."""
     assert classify({"InfluenceLevel": "High", "PriorityLevel": "High"}) == "Manage Closely"
     assert classify({"InfluenceLevel": "High", "PriorityLevel": "Low"}) == "Keep Satisfied"
     assert classify({"InfluenceLevel": "Low", "PriorityLevel": "High"}) == "Keep Informed"
@@ -102,27 +102,27 @@ def test_classify():
 
 test_classify()
 ```
-*Kết quả chạy test:* `All tests PASS` – Toàn bộ logic phân loại đều chính xác tuyệt đối.
+*Test Result:* `All tests PASS` – All boundary classifications validated with 100% precision.
 
 ---
 
-### 5. Tự đánh giá theo tiêu chí chấm điểm (Self-assessment Against Grading Criteria)
+### 5. Self-assessment Against Grading Criteria
 
-Bảng đối chiếu và tự đánh giá kết quả thực hiện theo đúng khung Rubric 10 điểm của học phần CSE703095:
+Self-assessment mapped directly to the 10.0-point grading rubric of course CSE703095:
 
-| Tiêu chí đánh giá (Criterion) | Điểm tối đa | Tự chấm | Ghi chú minh chứng (Notes) |
+| Criterion | Max | Self-score | Notes |
 |---|:---:|:---:|---|
-| **Bản Điều lệ dự án đầy đủ, rõ ràng**<br>*(Complete, clear Project Charter)* | **2.0** | **2.0** | Đầy đủ 4 mục bắt buộc (Goal, Scope, Constraints, Success criteria) với số liệu định lượng độc lập, đo lường được, không sao chép mẫu. |
-| **Phân loại Stakeholders chính xác**<br>*(Accurate stakeholder classification)* | **3.0** | **3.0** | 8/8 stakeholders được phân loại chính xác theo ma trận Power/Interest, khớp 100% với dữ liệu xuất tự động từ chương trình. |
-| **Script chạy đúng, không lỗi**<br>*(Script runs correctly, no errors)* | **3.0** | **3.0** | Mã nguồn Python thực thi sạch (exit code 0), có bộ unit test với 4 lệnh `assert` kiểm tra toàn diện các trường hợp biên. |
-| **Chất lượng trình bày báo cáo**<br>*(Report quality)* | **2.0** | **2.0** | Báo cáo trình bày khoa học, trực quan (bảng, listing code, callout note), tuân thủ tuyệt đối cấu trúc và thẩm mỹ chuẩn học thuật. |
-| **TỔNG ĐIỂM (TOTAL)** | **10.0** | **10.0** | **Hoàn thành xuất sắc toàn bộ các yêu cầu của bài Lab 01.** |
+| **Complete, clear Project Charter** | **2.0** | **2.0** | All 4 required sections present with distinct, quantifiable metrics tailored for MedBook. |
+| **Accurate stakeholder classification** | **3.0** | **3.0** | All 8 stakeholders accurately classified according to the Power/Interest grid; matches script output 100%. |
+| **Script runs correctly, no errors** | **3.0** | **3.0** | Python script executes cleanly (exit code 0); verified with 4 assert boundary tests. |
+| **Report quality** | **2.0** | **2.0** | Structured academically with clear tables, callout box, and code listings aligned with the benchmark template. |
+| **TOTAL** | **10.0** | **10.0** | **Fully achieved all requirements for Lab 01.** |
 
 ---
 
-### 6. Kết luận & Hướng phát triển (Conclusion)
+### 6. Conclusion
 
-Sinh viên đã hoàn thành xuất sắc toàn bộ các mục tiêu đặt ra cho bài thực hành **Lab 01**:
-1. Thiết lập thành công bản Điều lệ dự án rút gọn, tạo nền móng định hướng phạm vi và tiêu chí thành công vững chắc cho dự án **MedBook**.
-2. Xây dựng và kiểm thử thành công chương trình Python tự động hóa phân loại stakeholder theo ma trận Power/Interest Grid.
-3. Xuất và lưu trữ bộ dữ liệu các bên liên quan đã gắn nhãn chiến lược (`stakeholder_register.md`, `stakeholder_register_output.csv`), sẵn sàng làm đầu vào trực tiếp cho giai đoạn **Khơi mở và Thu thập yêu cầu (Elicitation)** trong bài **Lab 02**, tập trung ưu tiên cao độ vào 4 nhóm đối tượng nòng cốt *Manage Closely* (Bệnh nhân, Bác sĩ, Ban giám đốc và Đội ngũ phát triển).
+All objectives established for **Lab 01** have been accomplished:
+1. Developed a comprehensive Condensed Project Charter establishing clear project scope, constraints, and success criteria for **MedBook**.
+2. Implemented and validated an automated Python script classifying stakeholders according to the Power/Interest Grid.
+3. Exported and verified stakeholder datasets (`stakeholder_register.md`, `stakeholder_register_output.csv`), fully prepared as input for **Requirements Elicitation** in **Lab 02**, prioritizing the 4 "Manage Closely" stakeholder groups (Patients, Doctors, Hospital Administrators, and the Development team).
